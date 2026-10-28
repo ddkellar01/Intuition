@@ -1,0 +1,18 @@
+services:
+  intuition:
+    build: .
+    image: credkellar/intuition:latest
+    command: ["list"]
+  # The 4 merged credkellar images, as supplied in the notes:
+  deconstruction:
+    image: docker.io/credkellar/deconstruction:latest
+    profiles: ["fleet"]
+  malware-sandbox-suite:
+    image: docker.io/credkellar/malware-sandbox-suite:latest
+    profiles: ["fleet"]
+  app-data-compressor:
+    image: docker.io/credkellar/app-data-compressor:latest
+    profiles: ["fleet"]
+  honeyroot-x:
+    image: docker.io/credkellar/honeyroot-x:latest
+    profiles: ["fleet"]
