@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "intuition"
+version = "0.1.0"
+description = "Intuition (ASI, NNL, LLM, ML, SML, LML): 13 AI/agent systems merged into one council -- ask each expert, ask all, or get the grand answer. Pure stdlib."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+
+[project.scripts]
+intuition = "intuition.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
