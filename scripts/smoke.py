@@ -27,7 +27,12 @@ from intuition.eeg import EEGReading, council_context
 from intuition.projection import projection_brief
 from intuition.voice import VoiceSession
 
-assert len(list_devices()) == 7 and known_cost_total() == 1002.97
+assert len(list_devices()) == 8 and known_cost_total() == 1002.97
+from intuition.lie_detector import PhysioReading, assess
+_base = PhysioReading(2.0, 70, 14)
+assert assess(PhysioReading(8.0, 110, 24), _base)["state"] == "high"
+assert assess(_base, _base)["follow_up"] is False
+print("lie detector OK: calm unflagged, stressed flagged for follow-up")
 cam = Camera8K()
 cap = cam.take_pic("a whiteboard with a system diagram")
 ctx = council_context(EEGReading(5, 5, 10, 40, 10, 30))
@@ -35,6 +40,6 @@ assert ctx["answer_mode"] == "full"
 brief, _ = VoiceSession(brain).hear("what is a honeypot")
 assert "grand answer" in brief
 assert "CONFIDENCE" in projection_brief(g)
-print(f"hardware OK: 7 devices, camera {cap.capture_id}, EEG mode full, voice + projection briefs OK")
+print(f"hardware OK: 8 devices, camera {cap.capture_id}, EEG mode full, voice + projection briefs OK")
 print("\n" + g.text)
 print("\nSMOKE GREEN")
