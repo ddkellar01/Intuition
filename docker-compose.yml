@@ -2,6 +2,10 @@ services:
   intuition:
     build: .
     image: credkellar/intuition:latest
+    # Optional: set GEMINI_API_KEY in your shell / .env to enable the
+    # LLM polish layer; the council runs fully offline without it.
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
     command: ["list"]
   # The 4 merged credkellar images, as supplied in the notes:
   deconstruction:
