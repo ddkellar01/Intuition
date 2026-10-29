@@ -1,25 +1,53 @@
-"""The Council: ask each expert, ask one, or ask the routed best."""
-from .router import route
+"""
+Intuition Council Module
+"""
+
+# Relative import fix for local router module within the package
+from .router import router
 
 
 class Council:
     def __init__(self, experts):
-        self.experts = experts  # dict id -> Expert
+        """
+        experts: list of Expert objects or dict mapping expert_id -> Expert
+        """
+        if isinstance(experts, list):
+            self.experts = {e.id: e for e in experts}
+        else:
+            self.experts = experts  # dict id -> Expert
 
-    def ask_one(self, expert_id, question, polish=False):
+    def ask(self, expert_id, question, polish=False):
         if expert_id not in self.experts:
-            raise KeyError(f"unknown expert '{expert_id}' -- known: "
-                           f"{', '.join(self.experts)}")
+            raise ValueError(
+                f"Unknown expert '{expert_id}'. Known: "
+                f"{', '.join(self.experts.keys())}"
+            )
         return self.experts[expert_id].ask(question, polish=polish)
 
-    def ask_each(self, question, expert_ids=None, polish=False):
-        """Ask every expert (or the given subset). Every expert answers
-        -- even a low-confidence one, so you can see who knows what."""
-        ids = expert_ids or list(self.experts)
-        return [self.experts[eid].ask(question, polish=polish)
-                for eid in ids]
+    def route(self, question, expert_ids=None, polish=False):
+        """
+        Route question to specific expert(s) or all experts.
+        """
+        if expert_ids is None:
+            ids = list(self.experts.keys())
+        elif isinstance(expert_ids, str):
+            ids = [expert_ids]
+        else:
+            ids = expert_ids
 
-    def ask_routed(self, question, top=3, polish=False):
-        ranked = route(question, self.experts)
-        return [(eid, score, self.experts[eid].ask(question, polish=polish))
-                for eid, score in ranked[:top]]
+        results = {}
+        for eid in ids:
+            if eid in self.experts:
+                results[eid] = self.ask(eid, question, polish=polish)
+        return results
+
+    def select(self, question, top=3, polish=False):
+        """
+        Select top matching experts for a question using router logic.
+        """
+        ranked = router.rank(question, self.experts)
+        results = []
+        for eid, score in ranked[:top]:
+            answer = self.ask(eid, question, polish=polish)
+            results.append({"expert_id": eid, "score": score, "answer": answer})
+        return results
