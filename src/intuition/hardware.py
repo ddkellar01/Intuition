@@ -13,6 +13,9 @@ Every device has a stated software role in Intuition (interface layer):
   holo_projector .. hologram display target (concept image as supplied)
   camera_8k ....... the eyes: 8K cinematic camera -- see, take pics, record
                     (added by Darion 2026-10-28, no brand/price supplied)
+  lie_detector .... polygraph-style sensor: GSR + heart rate + respiration
+                    vs baseline -> arousal index + follow-up flag
+                    (added by Darion 2026-10-28, no brand/price supplied)
 """
 
 DEVICES = [
@@ -144,6 +147,23 @@ DEVICES = [
         "role": "The eyes of Intuition (see camera.py): the live feed is the council's "
                 "vision input, stills are captured as cited evidence frames, and 8K "
                 "recordings are sessions the experts can be asked about.",
+    },
+    {
+        "id": "lie_detector",
+        "name": "Lie Detector Sensor",
+        "kind": "input",
+        "source": "added by Darion in chat 2026-10-28 -- no brand, model or price supplied",
+        "price_usd": None,
+        "price_note": "no brand/model/price supplied -- none invented",
+        "rating": None,
+        "specs": [
+            "Skin conductance (GSR / electrodermal activity)",
+            "Heart rate and respiration rate",
+            "Calibrated per-subject baseline comparison",
+        ],
+        "role": "Arousal context input (see lie_detector.py): stress index vs baseline "
+                "during Voice Mode Q&A; elevated moments are flagged for a follow-up "
+                "question. It measures arousal, not deception -- never a truth verdict.",
     },
 ]
 
